@@ -1,0 +1,20 @@
+/* Styles go here */
+div {
+  text-align: center;
+  font-family: "Times New Roman", Georgia, serif;
+}
+label, input, button {
+  display: block;
+  margin: 10px auto;
+}
+
+input {
+  text-align: center;
+  border-radius: 5px;
+}
+
+button {
+  font-weight: bold;
+  border-radius: 5px;
+}
+

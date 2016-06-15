@@ -1,3 +1,3 @@
 # examples
 
-This branch is for JavaScript examples
+This branch is for AngularJS examples
