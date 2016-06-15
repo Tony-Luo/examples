@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="styleOffline.css" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <h1>
+      Task Tracker
+    </h1>
+    <div>v2.0</div>
+  </header>
+  <div id="displayTable">
+    <div>
+      <section id="create">
+        <h3>
+        Create a Task
+      </h3>
+        <form>
+          <div>
+            <label for="nameInput">Task Name</label>
+            <input type="text" id="nameInput" name="nameInput" />
+          </div>
+          <div>
+            <label for="dateInput">Date</label>
+            <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="dateInput" name="dateInput">
+          </div>
+          <div>
+            <label for="assignedInput">Assigned To</label>
+            <input type="text" id="assignedInput" name="assignedInput" />
+          </div>
+          <button type="button" onclick="submitForm()">Submit</button>
+          <p class="hide">Please fill all fields and try again</p>
+        </form>
+      </section>
+      <section id="display">
+        <h3>Existing Tasks</h3>
+        <div id="taskContainer"></div>
+      </section>
+    </div>
+  </div> <br /><div>Tony Luo</div>
+
+  <script src="jquery-1.12.4.min.js"></script>
+  <script src="appOffline.js"></script>
+</body>
+
+</html>
