@@ -1,3 +1,3 @@
 # examples
 
-This branch is for AngularJS examples
+This branch is for Reactjs examples

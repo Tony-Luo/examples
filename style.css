@@ -1,20 +1,20 @@
-/* Styles go here */
-div {
-  text-align: center;
-  font-family: "Times New Roman", Georgia, serif;
-}
-label, input, button {
-  display: block;
-  margin: 10px auto;
+table {
+    width: 100%;
 }
 
-input {
-  text-align: center;
-  border-radius: 5px;
+td {
+    border: 1px solid;
 }
 
-button {
-  font-weight: bold;
-  border-radius: 5px;
+.country {
+    border: 1px solid;
+    margin: 5px auto;
+    width: 70%;
+    text-align: center;
 }
 
+.label {
+    float: left;
+    margin-right: 10px;
+    text-align: center;
+}
