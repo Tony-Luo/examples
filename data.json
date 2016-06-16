@@ -1,0 +1,7 @@
+{
+  "US": ["P-51 Mustang", "North American Aviation", "15,000+"],
+  "UK": ["Spitfire", "Supermarine", "20,351"],
+  "USSR": ["La-5", "Lavochkin", "9,920"],
+  "Germany": ["Bf 109", "Messerschmitt AG", "33,984"],
+  "Japan": ["A6M Zero", "Mitsubishi", "10,939"]
+}

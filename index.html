@@ -1,21 +1,122 @@
-<!DOCTYPE html>
 <html>
 
 <head>
-  <link rel="stylesheet" href="style.css" />
+  <style>table {
+    width: 100%;
+}
+
+td {
+    border: 1px solid;
+}
+
+.country {
+    border: 1px solid;
+    margin: 5px auto;
+    width: 70%;
+    text-align: center;
+}
+
+.label {
+    float: left;
+    margin-right: 10px;
+    text-align: center;
+}</style>
 </head>
 
 <body>
   <div id="my-table"></div>
-  <hr>
-  <hr>
+  <hr />
+  <hr />
   <p>Tony Luo</p>
 
-  <hr>
+  <hr />
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
-  <script type="text/jsx" src="app.js"></script>
+  <script type="text/jsx">// Values for head of table
+var labels = ["Model", "Make", "Total Built Number"];
+
+// Values for first column of table
+var countries = ["US", "UK", "USSR", "Germany", "Japan"];
+
+// GET request to get data from server
+var getData = function(country) {
+  return $.get("/index?name=" + country);
+};
+
+// React class for table
+var myTable = React.createClass({
+  propTypes: {
+    countries: React.PropTypes.arrayOf(
+      React.PropTypes.string
+    ),
+    labels: React.PropTypes.arrayOf(
+      React.PropTypes.string
+    )
+  },
+  getInitialState: function() {
+    return {
+      planes: null
+    };
+  },
+  displayPlane: function(event) {
+    var self = this;
+    var plane = null;
+    getData(event.target.innerText).done(function(plane) {
+      if(plane) {
+        self.setState({
+          planes: plane.detail
+        });
+      }
+      else {
+        console.log(event.target.innerText);
+      }
+    });
+  },
+  render: function() {
+    var self = this;
+    return (
+      <table>
+        <tr>
+          <td onClick={self.displayPlane}>
+            {self.props.countries.map(function(country, ind) {
+              return <div id={ind} className="country">{country}</div>;
+            })}
+          </td>
+          <td>
+            <div className="label">
+              {self.props.labels.map(function(label, ind) {
+                return <div id={ind}>{label + ":"}</div>;
+              })}
+            </div>
+            <div className="plane">
+              {(function() {
+                if(self.state.planes) {
+                  return (self.state.planes.map(function(plane, ind) {
+                           return (<div id={ind}>{plane}</div>);
+                           })
+                         );
+                }
+                else {
+                  return null;
+                }
+              })()}
+            </div>
+          </td>
+        </tr>
+      </table>
+    )
+  }
+});
+
+// React app for table
+React.render(
+  React.createElement(myTable, {
+    countries: countries,
+    labels: labels
+  }),
+  document.getElementById('my-table')
+);</script>
 </body>
 
 </html>
