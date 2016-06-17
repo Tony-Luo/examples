@@ -1,126 +1,119 @@
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
 
-<head>
-  <style>
-  table {
-      width: 100%;
-  }
-  
-  td {
-      border: 1px solid;
-  }
-  
-  .country {
-      border: 1px solid;
-      margin: 5px auto;
-      width: 70%;
-      text-align: center;
-  }
-  
-  .label {
-      float: left;
-      margin-right: 10px;
-      text-align: center;
-  }
-  </style>
-</head>
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-<body>
-  <div id="my-table"></div>
-  <hr />
-  <hr />
-  <p>Tony Luo</p>
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
 
-  <hr />
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/JSXTransformer.js"></script>
-  <script type="text/jsx">
-  // Values for head of table
-  var labels = ["Model", "Make", "Total Built Number"];
-  
-  // Values for first column of table
-  var countries = ["US", "UK", "USSR", "Germany", "Japan"];
-  
-  // GET request to get data from server
-  var getData = function(country) {
-    return $.get("/index?name=" + country);
-  };
-  
-  // React class for table
-  var myTable = React.createClass({
-    propTypes: {
-      countries: React.PropTypes.arrayOf(
-        React.PropTypes.string
-      ),
-      labels: React.PropTypes.arrayOf(
-        React.PropTypes.string
-      )
-    },
-    getInitialState: function() {
-      return {
-        planes: null
-      };
-    },
-    displayPlane: function(event) {
-      var self = this;
-      var plane = null;
-      getData(event.target.innerText).done(function(plane) {
-        if(plane) {
-          self.setState({
-            planes: plane.detail
-          });
-        }
-        else {
-          console.log(event.target.innerText);
-        }
-      });
-    },
-    render: function() {
-      var self = this;
-      return (
-        <table>
-          <tr>
-            <td onClick={self.displayPlane}>
-              {self.props.countries.map(function(country, ind) {
-                return <div id={ind} className="country">{country}</div>;
-              })}
-            </td>
-            <td>
-              <div className="label">
-                {self.props.labels.map(function(label, ind) {
-                  return <div id={ind}>{label + ":"}</div>;
-                })}
-              </div>
-              <div className="plane">
-                {(function() {
-                  if(self.state.planes) {
-                    return (self.state.planes.map(function(plane, ind) {
-                             return (<div id={ind}>{plane}</div>);
-                             })
-                           );
-                  }
-                  else {
-                    return null;
-                  }
-                })()}
-              </div>
-            </td>
-          </tr>
-        </table>
-      )
-    }
-  });
-  
-  // React app for table
-  React.render(
-    React.createElement(myTable, {
-      countries: countries,
-      labels: labels
-    }),
-    document.getElementById('my-table')
-  );
-  </script>
-</body>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
 
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="app">
+
+    <ion-pane>
+      
+
+<ion-header-bar class="bar-positive">
+  <div class="buttons">
+    <h1 class="title">WWII Planes</h1>
+  </div>
+</ion-header-bar>
+
+<ion-content ng-controller="AppCtrl" class="padding">
+  <button class="button button-block" ng-click="openModal('us')"><img ng-src="{{usImg}}" alt="{{usAlt}}"></button>
+  <button class="button button-block" ng-click="openUKPlane()"><img ng-src="{{ukImg}}" alt="{{ukAlt}}"></button>
+  <button class="button button-block" ng-click="openUSSRPlane()"><img ng-src="{{ussrImg}}" alt="{{ussrAlt}}"></button>
+  <button class="button button-block" ng-click="openGermanyPlane()"><img ng-src="{{germanyImg}}" alt="{{germanyAlt}}"></button>
+  <button class="button button-block" ng-click="openJapanPlane()"><img ng-src="{{japanImg}}" alt="{{japanAlt}}"></button>
+</ion-content>
+
+<script id="us-modal.html" type="text/ng-template">
+ <ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">F4U Corsair</h1>
+      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <p>Manufacturer: Chance Vought</p>
+     <p>Total Built Number: 12,571</p>
+   </ion-content>
+ </ion-modal-view>
+</script>
+
+
+<script id="uk-modal.html" type="text/ng-template">
+ <ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">Spitfire</h1>
+      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <p>Manufacturer: Supermarine</p>
+     <p>Total Built Number: 20,351</p>
+   </ion-content>
+ </ion-modal-view>
+</script>
+
+<script id="ussr-modal.html" type="text/ng-template">
+ <ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">La-5</h1>
+      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <p>Manufacturer: Lavochkin</p>
+     <p>Total Built Number: 9,920</p>
+   </ion-content>
+ </ion-modal-view>
+</script>
+
+<script id="germany-modal.html" type="text/ng-template">
+ <ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">Bf 109</h1>
+      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <p>Manufacturer: Bayerische Flugzeugwerke</p>
+     <p>Total Built Number: 33,984</p>
+   </ion-content>
+ </ion-modal-view>
+</script>
+
+<script id="japan-modal.html" type="text/ng-template">
+ <ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">A6M Zero</h1>
+      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <p>Manufacturer: Mitsubishi</p>
+     <p>Total Built Number: 10,939</p>
+   </ion-content>
+ </ion-modal-view>
+</script>    </ion-pane>
+  </body>
 </html>
