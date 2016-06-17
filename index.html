@@ -23,7 +23,7 @@
   </head>
   <body ng-app="app">
 
-    <ion-pane>
+    <ion-pane ng-controller="AppCtrl">
       
 
 <ion-header-bar class="bar-positive">
@@ -32,86 +32,26 @@
   </div>
 </ion-header-bar>
 
-<ion-content ng-controller="AppCtrl" class="padding">
+<ion-content class="padding">
   <div ng-repeat="(country, plane) in countries">
     <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
   </div>
 </ion-content>
 
-<script id="us-modal.html" type="text/ng-template">
+<script id="modal.html" type="text/ng-template">
  <ion-modal-view>
    <ion-header-bar>
     <div class="buttons">
-      <h1 class="title">F4U Corsair</h1>
+      <h1 class="title">{{model}}</h1>
       <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
     </div>
    </ion-header-bar>
    <ion-content>
-     <p>Manufacturer: Chance Vought</p>
-     <p>Total Built Number: 12,571</p>
+     <p>Manufacturer: {{manufacturer}}</p>
+     <p>Total Built Number: {{totalBuiltNumber}}</p>
    </ion-content>
  </ion-modal-view>
 </script>
-
-
-<script id="uk-modal.html" type="text/ng-template">
- <ion-modal-view>
-   <ion-header-bar>
-    <div class="buttons">
-      <h1 class="title">Spitfire</h1>
-      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
-    </div>
-   </ion-header-bar>
-   <ion-content>
-     <p>Manufacturer: Supermarine</p>
-     <p>Total Built Number: 20,351</p>
-   </ion-content>
- </ion-modal-view>
-</script>
-
-<script id="ussr-modal.html" type="text/ng-template">
- <ion-modal-view>
-   <ion-header-bar>
-    <div class="buttons">
-      <h1 class="title">La-5</h1>
-      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
-    </div>
-   </ion-header-bar>
-   <ion-content>
-     <p>Manufacturer: Lavochkin</p>
-     <p>Total Built Number: 9,920</p>
-   </ion-content>
- </ion-modal-view>
-</script>
-
-<script id="germany-modal.html" type="text/ng-template">
- <ion-modal-view>
-   <ion-header-bar>
-    <div class="buttons">
-      <h1 class="title">Bf 109</h1>
-      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
-    </div>
-   </ion-header-bar>
-   <ion-content>
-     <p>Manufacturer: Bayerische Flugzeugwerke</p>
-     <p>Total Built Number: 33,984</p>
-   </ion-content>
- </ion-modal-view>
-</script>
-
-<script id="japan-modal.html" type="text/ng-template">
- <ion-modal-view>
-   <ion-header-bar>
-    <div class="buttons">
-      <h1 class="title">A6M Zero</h1>
-      <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
-    </div>
-   </ion-header-bar>
-   <ion-content>
-     <p>Manufacturer: Mitsubishi</p>
-     <p>Total Built Number: 10,939</p>
-   </ion-content>
- </ion-modal-view>
-</script>    </ion-pane>
+    </ion-pane>
   </body>
 </html>

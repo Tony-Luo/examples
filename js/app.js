@@ -31,7 +31,6 @@ angular.module('app', ['ionic'])
       model: 'F4U Corsair',
       manufacturer: 'Chance Vought',
       totalBuiltNumber: '12,571',
-      modal: null
     },
     "uk": {
       img: 'img/ukp1.jpg',
@@ -39,7 +38,6 @@ angular.module('app', ['ionic'])
       model: 'Spitfire',
       manufacturer: 'Supermarine',
       totalBuiltNumber: '20,351',
-      modal: null
     },
     "ussr": {
       img: 'img/ussrp1.jpg',
@@ -47,7 +45,6 @@ angular.module('app', ['ionic'])
       model: 'La-5',
       manufacturer: 'Lavochkin',
       totalBuiltNumber: '9,920',
-      modal: null
     },
     "germany": {
       img: 'img/germanyp1.jpg',
@@ -55,7 +52,6 @@ angular.module('app', ['ionic'])
       model: 'Bf 109',
       manufacturer: 'Chance Vought',
       totalBuiltNumber: '33,984',
-      modal: null
     },
     "japan": {
       img: 'img/japanp1.jpg',
@@ -63,47 +59,21 @@ angular.module('app', ['ionic'])
       model: 'A6M Zero',
       manufacturer: 'Mitsubishi',
       totalBuiltNumber: '10,939',
-      modal: null
     }
   };
 
-  $ionicModal.fromTemplateUrl('us-modal.html', {
+  // Misunderstand ionic modal before and find a new way to do what I want
+  $ionicModal.fromTemplateUrl('modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    $scope.countries['us'].modal = modal;
-  });
-
-  $ionicModal.fromTemplateUrl('uk-modal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.countries['uk'].modal = modal;
-  });
-
-  $ionicModal.fromTemplateUrl('ussr-modal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.countries['ussr'].modal = modal;
-  });
-
-  $ionicModal.fromTemplateUrl('germany-modal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.countries['germany'].modal = modal;
-  });
-
-  $ionicModal.fromTemplateUrl('japan-modal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.countries['japan'].modal = modal;
+    $scope.modal = modal;
   });
 
   $scope.openModal = function(country) {
-    $scope.modal = $scope.countries[country].modal;
+    $scope.model = $scope.countries[country].model;
+    $scope.manufacturer = $scope.countries[country].manufacturer;
+    $scope.totalBuiltNumber = $scope.countries[country].totalBuiltNumber;
     $scope.modal.show();
   };
   
