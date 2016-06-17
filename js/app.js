@@ -24,58 +24,86 @@ angular.module('app', ['ionic'])
 })
 
 .controller('AppCtrl', function($scope, $ionicModal) {
-  var usModal;
-  var ukModal;
-  var ussrModal;
-  var germanyModal;
-  var japanModal;
+  $scope.countries = {
+    "us": {
+      img: 'img/usp1.jpg',
+      alt: 'US plane F4U Corsair',
+      model: 'F4U Corsair',
+      manufacturer: 'Chance Vought',
+      totalBuiltNumber: '12,571',
+      modal: null
+    },
+    "uk": {
+      img: 'img/ukp1.jpg',
+      alt: 'UK plane Spitfire',
+      model: 'Spitfire',
+      manufacturer: 'Supermarine',
+      totalBuiltNumber: '20,351',
+      modal: null
+    },
+    "ussr": {
+      img: 'img/ussrp1.jpg',
+      alt: 'USSR plane La-5',
+      model: 'La-5',
+      manufacturer: 'Lavochkin',
+      totalBuiltNumber: '9,920',
+      modal: null
+    },
+    "germany": {
+      img: 'img/germanyp1.jpg',
+      alt: 'Germany plane Bf 109',
+      model: 'Bf 109',
+      manufacturer: 'Chance Vought',
+      totalBuiltNumber: '33,984',
+      modal: null
+    },
+    "japan": {
+      img: 'img/japanp1.jpg',
+      alt: 'Japan plane A6M Zero',
+      model: 'A6M Zero',
+      manufacturer: 'Mitsubishi',
+      totalBuiltNumber: '10,939',
+      modal: null
+    }
+  };
 
-  $scope.usImg = 'img/usp1.jpg';
-  $scope.ukImg = 'img/ukp1.jpg';
-  $scope.ussrImg = 'img/ussrp1.jpg';
-  $scope.germanyImg = 'img/germanyp1.jpg';
-  $scope.japanImg = 'img/japanp1.jpg';
   $ionicModal.fromTemplateUrl('us-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    usModal = modal;
+    $scope.countries['us'].modal = modal;
   });
 
   $ionicModal.fromTemplateUrl('uk-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    ukModal = modal;
+    $scope.countries['uk'].modal = modal;
   });
 
   $ionicModal.fromTemplateUrl('ussr-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    ussrModal = modal;
+    $scope.countries['ussr'].modal = modal;
   });
 
   $ionicModal.fromTemplateUrl('germany-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    germanyModal = modal;
+    $scope.countries['germany'].modal = modal;
   });
 
   $ionicModal.fromTemplateUrl('japan-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    japanModal = modal;
+    $scope.countries['japan'].modal = modal;
   });
- 
+
   $scope.openModal = function(country) {
-    switch(country) {
-      case "us":
-        $scope.modal = usModal;
-        break;
-    }
+    $scope.modal = $scope.countries[country].modal;
     $scope.modal.show();
   };
   
