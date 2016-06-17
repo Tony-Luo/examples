@@ -1,3 +1,3 @@
 # examples
 
-This branch is for Nodejs examples
+This branch is for Ionic examples
