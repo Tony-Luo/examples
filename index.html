@@ -23,30 +23,67 @@
   </head>
   <body ng-app="app">
 
-    <ion-pane ng-controller="AppCtrl">
+    
+<!--
+<ion-pane ng-controller="HomeCtrl">
       
 
 <ion-header-bar class="bar-positive">
   <div class="buttons">
-    <h1 class="title">WWII Planes</h1>
+    <h1 class="title">WWII Air Fighters</h1>
   </div>
-</ion-header-bar>
+</ion-header-bar>-->
 
+<ion-nav-bar class="bar-positive">
+  <ion-nav-back-button>
+  </ion-nav-back-button>
+</ion-nav-bar>
+
+<ion-nav-view></ion-nav-view>
+
+<ion-content>
+  <div class="list">
+    <div class="item item-divider">
+      Allies
+    </div>
+    <img class="item" ng-repeat="(country, plane) in countries.allies" ng-click="openModal(country)" ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px">
+    <!--<div class="item" ng-repeat="(country, plane) in countries.allies">
+
+      <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
+
+      <a class="item" href="#"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></a>
+    </div>-->
+
+    <div class="item item-divider">
+      Axis
+    </div>
+    <img class="item" ng-repeat="(country, plane) in countries.axis" ng-click="openModal(country)" ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px">
+    <!--<div class="item" ng-repeat="(country, plane) in countries.axis">
+      <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
+    </div>-->
+  </div>
+</ion-content>
+
+<!--
 <ion-content class="padding">
   <div ng-repeat="(country, plane) in countries">
     <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
   </div>
 </ion-content>
+-->
+
 
 <script id="modal.html" type="text/ng-template">
  <ion-modal-view>
    <ion-header-bar>
     <div class="buttons">
-      <h1 class="title">{{model}}</h1>
+      <h1 class="title">{{motto}}</h1>
       <button class="button button-icon ion-ios-close-empty" ng-click="closeModal()"></button>
     </div>
    </ion-header-bar>
    <ion-content>
+     <img src="{{modalImg}}" alt="{{alt}}" height="300px" width="100%">
+     <p>Model: {{model}}</p>
      <p>Manufacturer: {{manufacturer}}</p>
      <p>Total Built Number: {{totalBuiltNumber}}</p>
    </ion-content>

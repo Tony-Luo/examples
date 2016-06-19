@@ -1,0 +1,24 @@
+<ion-view view-title="WWII Air Fighters">
+<ion-content>
+  <div class="list">
+    <div class="item item-divider">
+      Allies
+    </div>
+    <img class="item" ng-repeat="(country, plane) in countries.allies" ng-click="openModal(country)" ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px">
+    <!--<div class="item" ng-repeat="(country, plane) in countries.allies">
+
+      <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
+
+      <a class="item" href="#"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></a>
+    </div>-->
+
+    <div class="item item-divider">
+      Axis
+    </div>
+    <img class="item" ng-repeat="(country, plane) in countries.axis" ng-click="openModal(country)" ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px">
+    <!--<div class="item" ng-repeat="(country, plane) in countries.axis">
+      <button class="button button-block" ng-click="openModal(country)"><img ng-src="{{plane.img}}" alt="{{plane.alt}}" width="100%" height="200px"></button>
+    </div>-->
+  </div>
+</ion-content>
+</ion-view>
