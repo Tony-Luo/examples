@@ -24,6 +24,7 @@ angular.module('app', ['ionic'])
 })
 
 .controller('HomeCtrl', function($scope, $ionicModal) {
+  $scope.isAllies = false;
   $scope.countries = {
     "allies": {
       "us": {
@@ -94,6 +95,7 @@ angular.module('app', ['ionic'])
         $scope.totalBuiltNumber = $scope.countries.axis[country].totalBuiltNumber;
         $scope.modalImg = $scope.countries.axis[country].modalImg;
         $scope.alt = $scope.countries.axis[country].alt;
+        $scope.isAllies = false;
         break;
       default:
         $scope.motto = $scope.countries.allies[country].motto;
@@ -102,6 +104,7 @@ angular.module('app', ['ionic'])
         $scope.totalBuiltNumber = $scope.countries.allies[country].totalBuiltNumber;
         $scope.modalImg = $scope.countries.allies[country].modalImg;
         $scope.alt = $scope.countries.allies[country].alt;
+        $scope.isAllies = true;
         break;
     }
     $scope.modal.show();
@@ -112,6 +115,18 @@ angular.module('app', ['ionic'])
   };
 })
 
+.controller('FightCtrl', function($scope, $ionicNavBarDelegate) {
+  $ionicNavBarDelegate.showBackButton(false);
+  
+  $scope.getNumber = function(num) {
+    return new Array(num);
+  };
+})
+
+.config(['$ionicConfigProvider', function($ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('bottom');
+}])
+
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
@@ -121,11 +136,13 @@ angular.module('app', ['ionic'])
     })
     .state('allies', {
       url: '/allies',
-      templateUrl: 'allies.html'
+      templateUrl: 'fight.html',
+      controller: 'FightCtrl'
     })
     .state('axis', {
       url: '/axis',
-      templateUrl: 'axis.html'
+      templateUrl: 'fight.html',
+      controller: 'FightCtrl'
     });
   
   $urlRouterProvider.otherwise('/');

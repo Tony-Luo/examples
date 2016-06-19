@@ -1,0 +1,21 @@
+<ion-modal-view>
+   <ion-header-bar>
+    <div class="buttons">
+      <h1 class="title">{{motto}}</h1>
+      
+    </div>
+   </ion-header-bar>
+   <ion-content>
+     <img ng-src="{{modalImg}}" alt="{{alt}}" height="300px" width="100%">
+     <p>Model: {{model}}</p>
+     <p>Manufacturer: {{manufacturer}}</p>
+     <p>Total Built Number: {{totalBuiltNumber}}</p>
+     <a href="#/allies" ng-if="isAllies" ng-click="closeModal()"><button class="button button-block button-positive">
+       Fight for Allies
+     </button></a>
+     <a href="#/axis" ng-if="!isAllies" ng-click="closeModal()"><button class="button button-block button-positive">
+       Fight for Axis
+     </button></a>
+     <button class="button button-block" ng-click="closeModal()">Choose Another Fighter</button>
+   </ion-content>
+ </ion-modal-view>
