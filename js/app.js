@@ -115,7 +115,7 @@ angular.module('app', ['ionic'])
   };
 })
 
-.controller('AxisFightCtrl', function($scope, $timeout, $ionicNavBarDelegate, AxisPlaneService, AxisMatrixService) {
+.controller('AxisFightCtrl', function($scope, $timeout, $interval, $ionicPopup,$ionicNavBarDelegate, AxisPlaneService, AxisMatrixService, ScoreService) {
   // Don't show back button in fight page
   $ionicNavBarDelegate.showBackButton(false);
   
@@ -124,11 +124,26 @@ angular.module('app', ['ionic'])
   var bomberIcon = 'ion-plane';
   var fighterIcon = 'ion-android-plane';
   var disappearIcon = 'ion-android-close';
+  var resultImg = 'img/1stResult.svg';
+  var resultAlt = 'Five Stars';
   var originalMatrix = [];
   var matrix = [];
   var planes = {};
   $scope.rowNumber = rowNumber;
   $scope.colNumber = colNumber;
+  $scope.user = {
+    name: 'Smith',
+    score: 0
+  };
+  $scope.startTime = '1:00';
+  $scope.endFight = function() {
+    console.log('end fight');
+    $ionicPopup.alert({
+      title: 'Victory!',
+      template: '<img src="' + resultImg + '" alt="' + resultAlt + '" height="100%" width="100%">',
+      okText: 'See your ranking'
+    })
+  };
   
   // Initialize original matrix model
   for(var i = 0; i < rowNumber; i++) {
@@ -143,6 +158,8 @@ angular.module('app', ['ionic'])
     originalMatrix.push(temp);
   }
   
+  var createPlanes = function() {
+  
   // Get first block of planes
   planes = AxisPlaneService.getPlanes(rowNumber, colNumber);
   console.log(planes);
@@ -150,6 +167,10 @@ angular.module('app', ['ionic'])
   // Initialize matrix DOM
   $scope.matrix = AxisMatrixService.setMatrix(originalMatrix, planes, bomberIcon, fighterIcon);
   console.log($scope.matrix);
+  
+  };
+
+  createPlanes();
 
   // Callback function for double-tap event
   var onDoubleTap = function(event) {
@@ -161,10 +182,11 @@ angular.module('app', ['ionic'])
     
     if(event.target.className.match(/ion-plane/i)) {
       $scope.matrix[planes.bomber.row][planes.bomber.col].planeIcon = disappearIcon;
+      $scope.user.score = ScoreService.shootDownBomber($scope.user.score);
       $scope.$apply();
       
       $timeout(function() {
-        console.log('shoot down the bomber');
+        createPlanes();
       }, 1000);
     }
   };
@@ -176,26 +198,34 @@ angular.module('app', ['ionic'])
   $scope.onSwipeUp = function() {
     console.log('swipe up');
     AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toTop', disappearIcon);
+    $scope.user.score = ScoreService.shootDownFighter($scope.user.score);
   };
 
   // Function for on-swipe-right event
   $scope.onSwipeRight = function() {
     console.log('swipe right');
     AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toRight', disappearIcon);
+    $scope.user.score = ScoreService.shootDownFighter($scope.user.score);
   };
 
   // Function for on-swipe-down event
   $scope.onSwipeDown = function() {
     console.log('swipe down');
     AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toBottom', disappearIcon);
+    $scope.user.score = ScoreService.shootDownFighter($scope.user.score);
   };
 
   // Function for on-swipe-left event
   $scope.onSwipeLeft = function() {
     console.log('swipe left');
     AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toLeft', disappearIcon);
+    $scope.user.score = ScoreService.shootDownFighter($scope.user.score);
   };
   
+  var getFightResult = function() {
+    return {title: 'Victory!', template: '<img src="' + firstResultImg + '" alt="' + firstResultAlt + '">'}
+  };
+
 })
 
 .service('AxisPlaneService', ['RandomNumberService', function(RandomNumberService) {
@@ -289,12 +319,68 @@ angular.module('app', ['ionic'])
   };
 }])
 
+.service('ScoreService', [function() {
+  return {
+    shootDownFighter: function(score) {
+      return score += 5000;
+    },
+    shootDownBomber: function(score) {
+      return score += 10000;
+    }
+  };
+}])
+
 .service('RandomNumberService', [function() {
   return {
     getRandomInteger: function(beginNumber, endNumber) {
       return Math.floor(Math.random() * endNumber) + beginNumber;
     }
   };
+}])
+
+.directive('myTimer', ['$interval', function($interval) {
+  return {
+    restrict: 'E',
+    scope: {
+      startTime: '@',
+      endFight: '&'
+    },
+    link: function(scope, element, attrs) {
+      var timeoutId;
+      var currentTime = scope.startTime.split(':');
+      var currentMinute = parseInt(currentTime[0], 10);
+      var currentSecond = parseInt(currentTime[1], 10);
+      
+      var displayTime = function() {
+        if(currentSecond < 10) {
+          element.text(currentMinute + ':0' + currentSecond);
+        }
+        else {
+          element.text(currentMinute + ':' + currentSecond);
+        }
+      };
+      
+      var updateTime = function() {        
+        if(currentSecond === 1 && currentMinute === 0) {
+          currentSecond--;
+          scope.endFight();
+          $interval.cancel(timeoutId);
+        }
+        else if(currentSecond === 0) {
+          currentSecond = 59;
+          currentMinute--;
+        }
+        else {
+          currentSecond--;
+        }
+
+        displayTime();
+      };
+      
+      displayTime();
+      timeoutId = $interval(updateTime, 1000);
+    }
+  }
 }])
 
 .config(['$ionicConfigProvider', function($ionicConfigProvider) {

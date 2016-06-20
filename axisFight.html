@@ -1,9 +1,10 @@
 <ion-view view-title="Shoot Down Bombers">
 
   <ion-content scroll="false" padding="true">
-    <div id="status">
-      <div id="score" class="left">Left</div>
-      <div id="timer" class="right">Right</div>
+    <div id="status" class="row">
+      <div id="score" class="col">Score: {{user.score | number}}</div>
+      <div id="name" class="col">Pilot: {{user.name}}</div>
+      <div id="timer" class="col">Timer: <my-timer start-time="{{startTime}}" end-fight="endFight()"></my-timer></div>
     </div>
 
     <div id="mainBody" class="padding"
@@ -28,7 +29,7 @@
 
     </div>
     
-    <div id="name">Pilot: {{user.name}}</div>
+    
   </ion-content>
     <div class="tabs tabs-icon-top">
       <button class="tab-item button button-positive">
