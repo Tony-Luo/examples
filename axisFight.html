@@ -1,0 +1,43 @@
+<ion-view view-title="Shoot Down Bombers">
+
+  <ion-content scroll="false" padding="true">
+    <div id="status">
+      <div id="score" class="left">Left</div>
+      <div id="timer" class="right">Right</div>
+    </div>
+
+    <div id="mainBody" class="padding"
+         on-swipe-up="onSwipeUp()"
+         on-swipe-right="onSwipeRight()"
+         on-swipe-down="onSwipeDown()"
+         on-swipe-left="onSwipeLeft()">
+    
+    <!--<div id="row_{{$index}}" class="row row-center" ng-repeat="i in getNumber(rowNumber) track by $index" ng-init="rowIndex = $index">
+      <div id="col_{{$index}}" class="col" ng-repeat="j in getNumber(colNumber) track by $index">
+        <i class="icon" ng-if="matrix[rowIndex][$index].showPlane" ng-class="[matrix[rowIndex][$index].planeIcon, matrix[rowIndex][$index].planeDirection]"></i>
+        <i class="icon ion-android-cloud-outline" ng-if="!matrix[rowIndex][$index].showPlane"></i>
+      </div>
+    </div>-->
+
+    <div id="row_{{$index}}" class="row row-center" ng-repeat="row in matrix track by $index" ng-init="rowIndex = $index">
+      <div id="col_{{$index}}" class="col" ng-repeat="col in matrix[rowIndex] track by $index">
+        <i class="icon" ng-if="!col.showCloud" ng-class="[col.planeIcon, col.planeDirection]"></i>
+        <i class="icon ion-android-cloud-outline" ng-if="col.showCloud"></i>
+      </div>
+    </div>
+
+    </div>
+    
+    <div id="name">Pilot: {{user.name}}</div>
+  </ion-content>
+    <div class="tabs tabs-icon-top">
+      <button class="tab-item button button-positive">
+        <i class="icon ion-ios-paperplane"></i>
+        Call for ACE
+      </button>
+      <button class="tab-item button button-positive">
+        <i class="icon ion-ionic"></i>
+        Atomic Bomb
+      </button>
+    </div>
+</ion-view>

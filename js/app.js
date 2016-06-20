@@ -115,15 +115,190 @@ angular.module('app', ['ionic'])
   };
 })
 
-.controller('FightCtrl', function($scope, $ionicNavBarDelegate) {
+.controller('AxisFightCtrl', function($scope, $timeout, $ionicNavBarDelegate, AxisPlaneService, AxisMatrixService) {
+  // Don't show back button in fight page
   $ionicNavBarDelegate.showBackButton(false);
   
-  $scope.getNumber = function(num) {
-    return new Array(num);
+  var rowNumber = 7;
+  var colNumber = 14;
+  var bomberIcon = 'ion-plane';
+  var fighterIcon = 'ion-android-plane';
+  var disappearIcon = 'ion-android-close';
+  var originalMatrix = [];
+  var matrix = [];
+  var planes = {};
+  $scope.rowNumber = rowNumber;
+  $scope.colNumber = colNumber;
+  
+  // Initialize original matrix model
+  for(var i = 0; i < rowNumber; i++) {
+    var temp = [];
+    for(var j = 0; j < colNumber; j++) {
+      temp.push({
+        showCloud: true,
+        planeIcon: undefined,
+        planeDirection: undefined
+      });
+    }
+    originalMatrix.push(temp);
+  }
+  
+  // Get first block of planes
+  planes = AxisPlaneService.getPlanes(rowNumber, colNumber);
+  console.log(planes);
+
+  // Initialize matrix DOM
+  $scope.matrix = AxisMatrixService.setMatrix(originalMatrix, planes, bomberIcon, fighterIcon);
+  console.log($scope.matrix);
+
+  // Callback function for double-tap event
+  var onDoubleTap = function(event) {
+    for(var i = 0; i < 4; i++) {
+      if(planes.fighters[i].hasBeenShotdown === false) {
+        return;
+      }
+    }
+    
+    if(event.target.className.match(/ion-plane/i)) {
+      $scope.matrix[planes.bomber.row][planes.bomber.col].planeIcon = disappearIcon;
+      $scope.$apply();
+      
+      $timeout(function() {
+        console.log('shoot down the bomber');
+      }, 1000);
+    }
   };
+
+  // Add event listener on double-tap event
+  ionic.onGesture('doubletap', onDoubleTap, document.getElementById('mainBody'), {});
+  
+  // Function for on-swipe-up event
+  $scope.onSwipeUp = function() {
+    console.log('swipe up');
+    AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toTop', disappearIcon);
+  };
+
+  // Function for on-swipe-right event
+  $scope.onSwipeRight = function() {
+    console.log('swipe right');
+    AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toRight', disappearIcon);
+  };
+
+  // Function for on-swipe-down event
+  $scope.onSwipeDown = function() {
+    console.log('swipe down');
+    AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toBottom', disappearIcon);
+  };
+
+  // Function for on-swipe-left event
+  $scope.onSwipeLeft = function() {
+    console.log('swipe left');
+    AxisMatrixService.setMatrixOnGesture($scope.matrix, planes, 'toLeft', disappearIcon);
+  };
+  
 })
 
+.service('AxisPlaneService', ['RandomNumberService', function(RandomNumberService) {
+  return {
+    createLocationForBomber: function(rowNumber, colNumber) {
+      // Don't let bomber display at edge
+      var maxRow = rowNumber - 2;
+      var maxCol = colNumber - 2;
+      var locationForBomber = {
+                                row: RandomNumberService.getRandomInteger(1, maxRow),
+                                col: RandomNumberService.getRandomInteger(1, maxCol),
+                                hasBeenShotdown: false
+                              };
+      
+      return locationForBomber;
+    },
+    calculateLocationForFighters: function(locationOfBomber) {
+      // 4 fighters are around bomber. List order is top, right, bottom, left
+      return [
+        {
+          location: {row: locationOfBomber.row - 1, col: locationOfBomber.col},
+          direction: this.calculateDirectionForFighters(),
+          hasBeenShotdown: false
+        },
+        {
+          location: {row: locationOfBomber.row, col: locationOfBomber.col + 1},
+          direction: this.calculateDirectionForFighters(),
+          hasBeenShotdown: false
+        },
+        {
+          location: {row: locationOfBomber.row + 1, col: locationOfBomber.col},
+          direction: this.calculateDirectionForFighters(),
+          hasBeenShotdown: false
+        },
+        {
+          location: {row: locationOfBomber.row, col: locationOfBomber.col - 1},
+          direction: this.calculateDirectionForFighters(),
+          hasBeenShotdown: false
+        }
+      ];
+    },
+    calculateDirectionForFighters: function() {
+      return ['toTop', 'toRight', 'toBottom','toLeft'][RandomNumberService.getRandomInteger(0, 3)];
+    },
+    getPlanes: function(rowNumber, colNumber) {
+      var bomber = this.createLocationForBomber(rowNumber, colNumber);
+      var fighters = this.calculateLocationForFighters(bomber);
+
+      return {
+        bomber: bomber,
+        fighters: fighters
+      };
+    }
+  };
+}])
+
+.service('AxisMatrixService', [function() {
+  return {
+    setMatrixForBomber: function(matrix, bomber, bomberIcon) {
+      matrix[bomber.row][bomber.col].showCloud = false;
+      matrix[bomber.row][bomber.col].planeIcon = bomberIcon;
+      
+      return matrix;
+    },
+    setMatrixForFighters: function(matrix, fighters, icon) {
+      fighters.forEach(function(fighter) {
+        matrix[fighter.location.row][fighter.location.col].showCloud = false;
+        matrix[fighter.location.row][fighter.location.col].planeIcon = icon;
+        matrix[fighter.location.row][fighter.location.col].planeDirection = fighter.direction;
+      });
+
+      return matrix;
+    },
+    setMatrixOnGesture: function(matrix, planes, gesture, disappearIcon) {
+      for(var i = 0; i < 4; i++) {
+        if(planes.fighters[i].direction === gesture && 
+           planes.fighters[i].hasBeenShotdown === false) {
+          planes.fighters[i].hasBeenShotdown = true;
+          this.setMatrixForFighters(matrix, [planes.fighters[i]], disappearIcon);
+          console.log('shoot down ' + gesture + ' fighter');
+          break;
+        }
+      }
+    },
+    setMatrix: function(originalMatrix, planes, bomberIcon, fighterIcon) {
+      var matrix = angular.copy(originalMatrix);
+      
+      matrix = this.setMatrixForBomber(matrix, planes.bomber, bomberIcon);
+      return this.setMatrixForFighters(matrix, planes.fighters, fighterIcon);
+    }
+  };
+}])
+
+.service('RandomNumberService', [function() {
+  return {
+    getRandomInteger: function(beginNumber, endNumber) {
+      return Math.floor(Math.random() * endNumber) + beginNumber;
+    }
+  };
+}])
+
 .config(['$ionicConfigProvider', function($ionicConfigProvider) {
+  // Super weapons bar always display at bottom
   $ionicConfigProvider.tabs.position('bottom');
 }])
 
@@ -134,15 +309,16 @@ angular.module('app', ['ionic'])
       templateUrl: 'home.html',
       controller: 'HomeCtrl'
     })
+    // TODO: allies pilots should have a different fight
     .state('allies', {
       url: '/allies',
-      templateUrl: 'fight.html',
-      controller: 'FightCtrl'
+      templateUrl: 'axisFight.html',
+      controller: 'AxisFightCtrl'
     })
     .state('axis', {
       url: '/axis',
-      templateUrl: 'fight.html',
-      controller: 'FightCtrl'
+      templateUrl: 'axisFight.html',
+      controller: 'AxisFightCtrl'
     });
   
   $urlRouterProvider.otherwise('/');

@@ -1,0 +1,16 @@
+/* Empty. Add your own CSS if you like */
+
+.toRight.ion-android-plane::before {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+}
+
+.toBottom.ion-android-plane::before {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.toLeft.ion-android-plane::before {
+  transform: rotate(270deg);
+  -webkit-transform: rotate(270deg);
+}
